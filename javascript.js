@@ -1,49 +1,96 @@
-var grantHealth = 10;
-var playerHealth = 40;
-var playerName = "";
-var turn = 1;
-var count = 0;
-var playing = true;
-if (prompt("do you want to play a game?").toLowerCase() === "yes")
-{
+startGame();
 
-  playerName = prompt("What is your Name?");
-  while (playing)
-  {
+
+
+
+function startCombat(playerName)
+{
+  var grantHealth = 10;
+  var playerHealth = 40;
+  var turn = 1;
+  var count = 0;
+  playing:
+    while (true)
+    {
 
       while((playerHealth > 0) && (grantHealth > 0))
       {
         console.log(playerName + " has " + playerHealth + " health left.");
         console.log("Grant the Mighty Chicken has " + grantHealth + " health left.")
         console.log("");
-        var damage = Math.floor((Math.random() * 2) + 1);
         if (turn === 1)
         {
-          playerHealth -= damage;
+          playerHealth -= getDamage();
           turn = 2;
         }else if (turn === 2)
         {
-          grantHealth -= damage;
-          turn = 1;
-        }
+            if (getUserInput("Your turn, what will you do?", "attack", "quit"))
+            {
+              grantHealth -= getDamage();
+              turn = 1;
+            }
+            else{
+              alert("Grant the Mighty Chicken has scared " + playerName + " away. He wins by default!!");
+              break playing;
+            }
+          }
       }
       if(playerHealth <= 0)
       {
-        console.log("Grant the Mighty Chicken is the Winner!!!")
-        playing = false;
+        alert("Grant the Mighty Chicken is the Winner!!!");
+        break playing;
       }else if (grantHealth <= 0) {
         count ++;
         if (count === 3)
         {
-          console.log(playerName + " is the Winner!!!");
-          playing = false;
+          alert(playerName + " is the Winner!!!");
+          break playing;
         }
         else
         {
-          console.log("Grant the Mighty Chicken has been defeated.....Oh No he has fully healed!")
+          console.log("Grant the Mighty Chicken has been defeated.....Oh No he has fully healed!");
           console.log("");
           grantHealth = 10;
         }
       }
     }
+  }
+function startGame() {
+  if (getUserInput("do you want to play a game?","yes", "no"))
+  {
+    var playerName = prompt("What is your Name?") || "";
+    startCombat(playerName);
+  }else {
+    alert("LAME!")
+  }
+}
+
+function getDamage(){
+    return damage = Math.floor((Math.random() * 5) + 1);
+}
+
+
+
+function getUserInput(question, yes, no)
+{
+  var ret;
+  nullCheck:
+  while(true)
+  {
+    var answer = (prompt(question + " (" + yes + ", " + no + ")") || "").toLowerCase();
+    if(answer === yes)
+    {
+      ret = true;
+      break nullCheck;
+    }
+    else if(answer === no)
+    {
+      ret = false;
+      break nullCheck;
+    }
+    else {
+      alert("try again");
+    }
+  }
+  return ret;
 }
