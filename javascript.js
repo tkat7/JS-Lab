@@ -1,5 +1,5 @@
 startGame();
-
+//start
 
 
 
@@ -9,6 +9,7 @@ function startCombat(playerName)
   var playerHealth = 40;
   var turn = 1;
   var count = 0;
+  //named while true loop to loop until broken
   playing:
     while (true)
     {
@@ -55,6 +56,8 @@ function startCombat(playerName)
       }
     }
   }
+
+  //asks them if they want to play and runs code if yes
 function startGame() {
   if (getUserInput("do you want to play a game?","yes", "no"))
   {
@@ -65,12 +68,13 @@ function startGame() {
   }
 }
 
+//generates a random number between 1 and 5 to be used as damge
 function getDamage(){
     return damage = Math.floor((Math.random() * 5) + 1);
 }
 
 
-
+//sorry about this i just dont like when people make invalid inputs
 function getUserInput(question, yes, no)
 {
   var ret;
