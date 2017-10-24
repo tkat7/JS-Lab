@@ -5,58 +5,81 @@ startGame();
 
 function startCombat(playerName)
 {
-  var grantHealth = 10;
-  var playerHealth = 40;
+  var player = {
+    name: playerName,
+    health: 40,
+    attack: function(){ return Math.floor((Math.random() * 3) + 1);},
+    wins: 0,
+    heal: function(){ return this.health += Math.floor((Math.random() * 10) + 1);},
+    healCount: 0};
+  var grant = {
+    name: "Grant the Mighty Chicken",
+    health: 10,
+    attack: function(){ return Math.floor((Math.random() * 5) + 1);}};
   var turn = 1;
-  var count = 0;
-  //named while true loop to loop until broken
+
   playing:
     while (true)
     {
-
-      while((playerHealth > 0) && (grantHealth > 0))
+      while((player.health > 0) && (grant.health > 0))
       {
-        console.log(playerName + " has " + playerHealth + " health left.");
-        console.log("Grant the Mighty Chicken has " + grantHealth + " health left.")
+        console.log(player.name + " has " + player.health + " health left.");
+        console.log(grant.name + " has " + grant.health + " health left.")
         console.log("");
         if (turn === 1)
         {
-          playerHealth -= getDamage();
+          player.health -= grant.attack();
           turn = 2;
         }else if (turn === 2)
         {
-            if (getUserInput("Your turn, what will you do?", "attack", "quit"))
+          nullCheck:
+          while(true)
+          {
+            var answer = prompt("Your turn, what will you do? (attack, quit" + ((player.healCount < 2) ?  ", heal)" : ")"));
+            if(answer.toLowerCase() === "attack")
             {
-              grantHealth -= getDamage();
+              grant.health -= player.attack();
               turn = 1;
+              break nullCheck;
             }
-            else{
-              alert("Grant the Mighty Chicken has scared " + playerName + " away. He wins by default!!");
+            else if(answer === "quit")
+            {
+              alert("LAME!!");
               break playing;
+            }else if(answer === "heal" && player.healCount < 2)
+            {
+              player.heal();
+              player.healCount ++;
+              turn = 1;
+              break nullCheck;
+            }
+            else {
+              alert("try again");
             }
           }
+        }
       }
-      if(playerHealth <= 0)
-      {
-        alert("Grant the Mighty Chicken is the Winner!!!");
-        break playing;
-      }else if (grantHealth <= 0) {
-        count ++;
-        if (count === 3)
-        {
-          alert(playerName + " is the Winner!!!");
-          break playing;
-        }
-        else
-        {
-          console.log("Grant the Mighty Chicken has been defeated.....Oh No he has fully healed!");
-          console.log("");
-          grantHealth = 10;
-        }
+          if(player.health <= 0)
+          {
+            alert("Grant the Mighty Chicken is the Winner!!!");
+            break playing;
+          }else if (grant.health <= 0) {
+            player.wins ++;
+            if (player.wins === 5)
+            {
+              alert(player.name + " is the Winner!!!");
+              break playing;
+            }
+            else
+            {
+              console.log("Grant the Mighty Chicken has been defeated.....Oh No he has fully healed!");
+              console.log("");
+              grant.health = 10;
+            }
+          }
+
       }
     }
-  }
-
   //asks them if they want to play and runs code if yes
 function startGame() {
   if (getUserInput("do you want to play a game?","yes", "no"))
@@ -67,13 +90,6 @@ function startGame() {
     alert("LAME!")
   }
 }
-
-//generates a random number between 1 and 5 to be used as damge
-function getDamage(){
-    return damage = Math.floor((Math.random() * 5) + 1);
-}
-
-
 //sorry about this i just dont like when people make invalid inputs
 function getUserInput(question, yes, no)
 {
