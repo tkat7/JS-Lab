@@ -27,21 +27,31 @@ body{
   border-right: 2px solid black;
   text-align: center;
 }
+#pExtra{
+  height: 100%;
+  width: 0%;
+  background-color: yellow;
+  border-right: 1px solid black;
+}
 #pHealthIn{
   height: 100%;
   background-color: red;
+  border-right: 1px solid black;
 }
 #pCountIn{
   height: 100%;
   background-color: red;
+    border-right: 1px solid black;
 }
 #pWinsIn{
   height: 100%;
   background-color: red;
+    border-right: 1px solid black;
 }
 #gHealthIn{
   height: 100%;
   background-color: red;
+    border-right: 1px solid black;
 }
 .grant{
   height: 100%;
@@ -89,4 +99,8 @@ line-height: 50px;
 width: 100px;
 font-size: 30px;
 border: 1px solid black;
+}
+
+button:hover{
+background-color: darkblue;
 }

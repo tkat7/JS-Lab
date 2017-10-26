@@ -54,10 +54,17 @@ var pCount = document.getElementById('pCountIn');
 var pWins = document.getElementById('pWinsIn');
 var gHealth = document.getElementById('gHealthIn');
 var gName = document.getElementById('gName');
+var pExtra = document.getElementById('pExtra');
 
 pName.textContent = "Name: " + player.name;
 gName.textContent = "Name: " + grant.name;
+if(player.health > 40){
+  pExtra.style.width = (((player.health - 40)/40)*100) + "%";
+  pHealth.style.width = "100%";
+}else{
 pHealth.style.width = ((player.health/40)*100) + "%";
+pExtra.style.width = "0%";
+}
 pCount.style.width = ((player.healCount/2)*100) + "%";
 pWins.style.width = ((player.wins/5)*100) + "%";
 gHealth.style.width = ((grant.health/10)*100) + "%";
