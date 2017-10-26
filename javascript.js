@@ -1,116 +1,102 @@
-startGame();
-//start
-
-
-
-function startCombat(playerName)
+var player;
+var grant;
+function startCombat(playerMove){
+var text = "";
+  switch(playerMove){
+    case "attack":
+      player.health -= grant.attack();
+      grant.health -= player.attack();
+      text = player.name + " has " + player.health + " health remaining. " + grant.name + " has " + grant.health + " health remaining.";
+      break;
+    case "heal":
+      var heal = player.health;
+      player.heal();
+      heal = player.health - heal;
+      player.health -= grant.attack();
+      text = player.name + " has healed for " + heal + " and now has " + player.health + " health remaining. " + grant.name + " has " + grant.health + " health remaining.";
+      if (player.healCount === 2)
+      {
+        var btn = document.getElementById('heal');
+        btn.disabled = true;
+        btn.style.backgroundColor = 'grey';
+      }
+      break;
+    case "quit":
+      text = grant.name + " has scared " + player.name + " away! He wins by default.";
+      end(text);
+      break;
+  }
+  if(grant.health <= 0)
+  {
+    if(player.wins === 5)
+    {
+      text = player.name + " is the Winner!!!";
+      end(text);
+  }else{
+    player.wins ++;
+    grant.health = 10;
+    text = grant.name + " has been defeated.....Oh No he has fully healed!";
+  }
+}else if(player.health <= 0)
 {
-  var player = {
+  text = grant.name + " is the Winner!!!"
+  end(text);
+}
+document.getElementById('text').textContent = text;
+console.log(text);
+updateDOM();
+}
+
+function updateDOM(){
+var pName = document.getElementById('pName');
+var pHealth = document.getElementById('pHealthIn');
+var pCount = document.getElementById('pCountIn');
+var pWins = document.getElementById('pWinsIn');
+var gHealth = document.getElementById('gHealthIn');
+var gName = document.getElementById('gName');
+
+pName.textContent = "Name: " + player.name;
+gName.textContent = "Name: " + grant.name;
+pHealth.style.width = ((player.health/40)*100) + "%";
+pCount.style.width = ((player.healCount/2)*100) + "%";
+pWins.style.width = ((player.wins/5)*100) + "%";
+gHealth.style.width = ((grant.health/10)*100) + "%";
+}
+
+function end(text){
+  document.getElementsByClassName('start')[0].style.display = 'none';
+  document.getElementsByClassName('options')[0].style.display = 'none';
+  document.getElementsByClassName('dom')[0].style.display = 'none';
+  var endText = document.getElementById('text');
+  endText.textContent = text;
+  endText.style.fontSize = "50px";
+}
+
+function startGame() {
+  var playerName = prompt("What is your Name?") || "";
+  player = {
     name: playerName,
     health: 40,
-    attack: function(){ return Math.floor((Math.random() * 3) + 1);},
+    attack: function(){
+      return Math.floor((Math.random() * 3) + 1);
+    },
     wins: 0,
-    heal: function(){ return this.health += Math.floor((Math.random() * 10) + 1);},
-    healCount: 0};
-  var grant = {
+    heal: function(){
+      player.healCount ++;
+      return this.health += Math.floor((Math.random() * 10) + 1);
+    },
+    healCount: 0
+  };
+  grant = {
     name: "Grant the Mighty Chicken",
     health: 10,
-    attack: function(){ return Math.floor((Math.random() * 5) + 1);}};
-  var turn = 1;
-
-  playing:
-    while (true)
-    {
-      while((player.health > 0) && (grant.health > 0))
-      {
-        console.log(player.name + " has " + player.health + " health left.");
-        console.log(grant.name + " has " + grant.health + " health left.")
-        console.log("");
-        if (turn === 1)
-        {
-          player.health -= grant.attack();
-          turn = 2;
-        }else if (turn === 2)
-        {
-          nullCheck:
-          while(true)
-          {
-            var answer = prompt("Your turn, what will you do? (attack, quit" + ((player.healCount < 2) ?  ", heal)" : ")"));
-            if(answer.toLowerCase() === "attack")
-            {
-              grant.health -= player.attack();
-              turn = 1;
-              break nullCheck;
-            }
-            else if(answer === "quit")
-            {
-              alert("LAME!!");
-              break playing;
-            }else if(answer === "heal" && player.healCount < 2)
-            {
-              player.heal();
-              player.healCount ++;
-              turn = 1;
-              break nullCheck;
-            }
-            else {
-              alert("try again");
-            }
-          }
-        }
-      }
-          if(player.health <= 0)
-          {
-            alert("Grant the Mighty Chicken is the Winner!!!");
-            break playing;
-          }else if (grant.health <= 0) {
-            player.wins ++;
-            if (player.wins === 5)
-            {
-              alert(player.name + " is the Winner!!!");
-              break playing;
-            }
-            else
-            {
-              console.log("Grant the Mighty Chicken has been defeated.....Oh No he has fully healed!");
-              console.log("");
-              grant.health = 10;
-            }
-          }
-
-      }
+    attack: function(){
+      return Math.floor((Math.random() * 5) + 1);
     }
-  //asks them if they want to play and runs code if yes
-function startGame() {
-  if (getUserInput("do you want to play a game?","yes", "no"))
-  {
-    var playerName = prompt("What is your Name?") || "";
-    startCombat(playerName);
-  }else {
-    alert("LAME!")
-  }
-}
-//sorry about this i just dont like when people make invalid inputs
-function getUserInput(question, yes, no)
-{
-  var ret;
-  nullCheck:
-  while(true)
-  {
-    var answer = (prompt(question + " (" + yes + ", " + no + ")") || "").toLowerCase();
-    if(answer === yes)
-    {
-      ret = true;
-      break nullCheck;
-    }
-    else if(answer === no)
-    {
-      ret = false;
-      break nullCheck;
-    }
-    else {
-      alert("try again");
-    }
-  }
-  return ret;
+  };
+  document.getElementsByClassName('start')[0].style.display = 'none';
+  document.getElementsByClassName('options')[0].style.display = 'inline';
+  document.getElementsByClassName('dom')[0].style.display = 'flex';
+  updateDOM();
+  document.getElementById('text').textContent = player.name + " has 40 health remaining. Grant the Mighty Chicken has 10 health remaining.";
 }
